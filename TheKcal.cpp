@@ -41,6 +41,9 @@ int TheKcal::menuDraw()
 	textcolor(14);
 	cout << "[ w키(UP) , s키(DOWN) ]" << endl;
 
+	this->x = 22;
+	this->y = 15;
+
 	textcolor(15);
 	gotoxy(x, y);
 	cout << "키 몸무게 입력" << endl;
@@ -128,33 +131,32 @@ void TheKcal::input() {
 			gotoxy(20, 17); textcolor(15); cout << "당신의 키 : " << height << endl;
 			gotoxy(20, 19); cout << "당신의 몸무게 : " << weight << endl;
 			gotoxy(20, 21); textcolor(14); cout << "표준 몸무게 : 68kg" << endl;
-		}
-		else {
-			gotoxy(20, 21);
-			textcolor(15);
-			cout << "저장되어 있는 데이터가 없습니다." << endl;
-		}
+		}		
 	}
+
 	system("pause>null");
 }
 void TheKcal::inputWantCal() {
 	//원하는 칼로리 소모량 입력
+	
 	start2_display();
 
 	int n2;//원하는 칼로리 소모량 입력받기
-	gotoxy(8, 12);
+	gotoxy(x-14, y-3);
 	cout << "원하는 칼로리 소모량을 입력하세요.(숫자)" << endl;
-	gotoxy(8, 14);
+	gotoxy(x-14, y-1);
 	cout << ">>>";
 	cin >> n2;
-	//여기서 DB 
-	//***님의 원하느 칼로리 소모량은 *** 입니다. 뜨게 하기
-	system("pause>>null");
-
+	
+	gotoxy(x-14,y+1);
+	cout << "원하는 칼로리 소모량 --> ";
+	textcolor(14);
+	gotoxy(x +12, y +1);
+	cout << n2 << endl;
+	system("pause>null");
 }
 int TheKcal::chooseSports() {//운동선택
 	start2_display();
-
 	gotoxy(x, y - 2);
 	cout << ">";
 	gotoxy(x, y - 2);
@@ -175,17 +177,6 @@ void TheKcal::ex_mathod() {
 	string str;
 	int htime;
 
-	/*system("cls");
-	start2_display();
-
-	gotoxy(x - 9, y);
-	switch (ex_c) {
-	case 0:cout << "어떤 유산소 운동을 하셨나요? >> "; break;
-	case 1:cout << "어떤 근력 운동을 하셨나요? >> "; break;
-	case 2:cout << "어떤 스트레칭을 하셨나요? >> "; break;
-	case 3:cout << "어떤 일상 운동을 하셨나요? >> "; break;
-	}
-*/
 	system("cls");
 	start2_display();
 	gotoxy(x-9, y );
@@ -202,13 +193,18 @@ void TheKcal::ex_mathod() {
 	cin >> htime;
 	
 	switch (htime) {
+		
 	case 1 :
+		gotoxy(x - 14, y + 10);
 		cout << " **** 님 ***운동 15분 ~150칼로리 소모 하였습니다."; break;
 	case 2 :
+		gotoxy(x - 14, y + 10);
 		cout << " **** 님 ***운동 30~분 300칼로리 소모 하였습니다."; break;
 	case 3:
+		gotoxy(x - 14, y + 10);
 		cout << " **** 님 ***운동 1시간 ~557칼로리 소모 하였습니다."; break;
 	case 4:
+		gotoxy(x - 14, y + 10);
 		cout << " **** 님 ***운동 2시간 1000칼로리 소모 하였습니다."; break;
 	}
 	//여기 db해서 15분 했으면 ***님 **운동 **분 ~150칼로리소모 하였습니다.
@@ -272,6 +268,8 @@ void TheKcal::textcolor(int color_number) //텍스트 칼라를 바꿔주는 함수
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color_number);
 }
 int TheKcal::key() {
+	x = 22;
+	y = 15;
 	textcolor(10);
 	gotoxy(x - 2, y);
 	cout << ">";
