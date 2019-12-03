@@ -3,8 +3,8 @@
 
 #include "TheKcal.h"
 
+int ex_c, savecal,n3;
 
-int ex_c;
 
 TheKcal::TheKcal(int x, int y) {
 	this->x = x;
@@ -22,16 +22,201 @@ void TheKcal::inputId() {
 	string id;
 	textcolor(15);
 	start2_display();
-	gotoxy(x - 1, y);
-	cout << "id를 입력하세요. >> ";
+
+	ofstream fout("member.txt");
+	gotoxy(x -10, y);
+	cout << "id를 입력하세요.";
+	textcolor(14);
+	/*gotoxy(x +5, y);
+	cout << " (9글자 이하로 적으세요.)";*/
+	textcolor(14);
+	gotoxy(x -10, y + 3);
+	cout << ">> ";
+	textcolor(15);
 	cin >> id;
-	choose_number();
+	if (id == "joo1948") { admire(); }
+	int width = sizeof(id) / sizeof(string);
+	cout.width(width);
+	fout << id <<endl;
+	choose_number(); 
+}
+
+void TheKcal::admire() {
+	x = 22;
+	y = 15;
+
+	start2_display();
+	
+	gotoxy(x-1, y - 5);
+	textcolor(15);
+	cout << "    --관리자 페이지--" << endl;
+
+	gotoxy(x, y);
+	cout << ">";
+	gotoxy(x, y);
+	cout << "리뷰 보기";
+	gotoxy(x, y + 1);
+	cout << "메모 하기";
+	gotoxy(x, y + 2);
+	cout << "메모 보기";
+	gotoxy(x, y + 3);
+	cout << "TheKcal 시작";
+	int k = key();
+	if(k==0) showadmire(k);//리뷰 보기로 가기
+	else if (k == 1) wirtememo();//메모 쓰기로 가기
+	else if (k == 2) readmemo();//메모 보기로 가기
+	else if (k == 3) menuDraw();//시작화면으로 가기
+
+}
+void TheKcal::showadmire(int k) {
+
+	string empid;
+	string emptalk;
+
+	system("cls");
+	start2_display();
+
+	ifstream review;
+
+	review.open("review.txt");
+
+	gotoxy(x + 2, y - 8);
+	cout << "♥♥리뷰보기♥♥";
+	gotoxy(x - 10, y-5);
+	textcolor(14);
+	cout << " ID";
+	gotoxy(x+3 , y - 5);
+	textcolor(14);
+	cout << "리뷰내용";
+
+	int j = 2;
+	if (k == 0) {
+		
+		while (review >> empid >> emptalk/*>> empreview*/) {
+			textcolor(15);
+			gotoxy(x - 10, y - j);
+			cout << empid << "\t" << emptalk << endl/*<< empreview << setw(20) */;
+			j -= 3;
+
+		}
+
+		review.close();
+	}
+
+	system("pause>null");
+	
+	showadmire_1();
+}
+void TheKcal::showadmire_1() {
+	string empid;
+	string emptalk;
+
+	system("cls");
+	start2_display();
+
+	ifstream review;
+
+	review.open("review_2.txt");
+
+	gotoxy(x + 2, y - 8);
+	cout << "♥♥리뷰보기♥♥";
+	gotoxy(x - 10, y - 5);
+	textcolor(14);
+	cout << " ID";
+	gotoxy(x + 3, y - 5);
+	textcolor(14);
+	cout << "리뷰내용";
+
+	int j = 2;
+
+		while (review >> empid >> emptalk/*>> empreview*/) {
+			textcolor(15);
+			gotoxy(x - 10, y - j);
+			cout << empid << "\t" << emptalk << endl/*<< empreview << setw(20) */;
+			j -= 3;
+
+		}
+
+	
+		review.close();
+	
+		gotoxy(x + 30, y + 9);
+		textcolor(13);
+		cout << "끝";
+		textcolor(15);
+	system("pause>null");
+
+	admire();
+}
+void TheKcal::wirtememo() {
+	system("cls");
+	start2_display();//네모 박스 부르기
+
+	gotoxy(20,8);
+	textcolor(14);
+	cout << "   --메모 하기--";
+	textcolor(15);
+	gotoxy(12, 12);
+	cout << "다 입력 하였으면 Enter 후 Space키..";
+
+
+	char memo[90];
+
+	ofstream fout("memo.txt",ios::app);
+	
+	if (!fout) {
+		cerr << "파일 오픈 실패" << endl;
+		exit(1);
+	}
+
+	gotoxy(13, 17);
+	cout << "->";
+	cin >> memo;
+	
+	fout << memo << endl;
+
+	system("pause>null");
+
+
+	admire();
+	
+}
+void TheKcal::readmemo() {
+
+	system("cls");
+	start2_display();
+
+	string memo;
+
+	ifstream readmemo;
+
+	readmemo.open("memo.txt");
+
+	gotoxy(20, 8);
+	textcolor(14);
+	cout << "     --메모 보기--";
+	
+	int j = 0;
+	while (readmemo>>memo) {
+		textcolor(15);
+		gotoxy(x+4 , 13+j );
+		cout << memo <<"\t" << endl;
+		j+=2;
+	}
+
+	readmemo.close();
+
+	system("pause>null");
+	admire();
 }
 int TheKcal::menuDraw()
 {
 	start2_display();//네모 박스 부르기
 
 	gotoxy(27, 8);
+	//for (int i = 0; i < 15; i++) {
+		textcolor(15);
+	//}
 	cout << "+The Kcal+" << endl;
 
 	gotoxy(25, 10);
@@ -50,9 +235,9 @@ int TheKcal::menuDraw()
 	gotoxy(x, y + 1);
 	cout << "목표 칼로리 소모량 입력" << endl;
 	gotoxy(x, y + 2);
-	cout << "운동 시간" << endl;
+	cout << "먹은 음식" << endl;
 	gotoxy(x, y + 3);
-	cout << "종료" << endl;
+	cout << "칼로리 소모한 양 보기" << endl;
 
 	int k = key();
 
@@ -71,16 +256,12 @@ void TheKcal::choose_number() {
 			inputWantCal();
 		}
 		else if (menuCode == 2) {
-			//운동 선택
-			ex_c = chooseSports();
-			if (ex_c == 0 || ex_c == 1 || ex_c == 2 || ex_c == 3)
-				ex_mathod();
-			//여기는 이제 db로 넣을 곳 ex) 유산소 운동 - 자전거 - 30분
+			//먹은 음식 보기 & 운동 시간
+			savefoodKcal();
 		}
 		else if (menuCode == 3) {
-			//종료
-			gotoxy(100, 100);
-			exit(0);
+			//칼로리 소모량 보기
+			minus_kcal();
 		}
 	}
 }
@@ -90,138 +271,300 @@ void TheKcal::input() {
 	start2_display();
 
 	//키 몸무게 입력 & 평균 몸무게 나오게 하기 - 150~160까지
-	int tall[][5] = { {0,1,2,3,4},{5,6,7,8,9},{10,11,12,13,14},{15,16,17,18,19},{20,21,22,23,24}, {25,26,27,28,29} };
-	int height = 0, weight = 0;
-	gotoxy(20, 11);
+	int tall[7][5] = { {150,151,152,153,154},{155,156,157,158,159},{160,161,162,163,164},{165,166,167,168,169},
+	{170,171,172,173,174}, {175,176,177,178,179},{180, } };
+	int height = 0;
+	int weight = 0;
+	gotoxy(11, 9);
+	textcolor(14);
+	cout << "★★★";
+	gotoxy(17, 9);
+	textcolor(15);
+	cout << "키&몸무게를 정수로 입력하세요.";
+	gotoxy(47,9);
+	textcolor(14);
+	cout<<"★★★";
+	textcolor(15);
+	gotoxy(20, 13);
 	cout << "키를 입력하세요. : ";
 	cin >> height;
-	gotoxy(20, 13);
+	gotoxy(20, 16);
 	cout << "몸무게를 입력하세요. : ";
 	cin >> weight;
 
-	int h = height % 150;
 
-	for (int j = 0; j < 6; j++) {
-		if (tall[1][j] == h) {
-			gotoxy(20, 17); textcolor(15); cout << "당신의 키 : " << height << endl;
-			gotoxy(20, 19); cout << "당신의 몸무게 : " << weight << endl;
-			gotoxy(20, 21); textcolor(14); cout << "표준 몸무게 : 52kg" << endl;
+	for (int j = 0; j < 5; j++) {
+		if (tall[0][j] == height) {//150~154
+			gotoxy(20, 19); textcolor(15); cout << "당신의 키 : " << tall[0][j] << endl;
+			gotoxy(20, 21); cout << "당신의 몸무게 : " << weight << endl;
+			gotoxy(20, 23); textcolor(14); cout << "표준 몸무게 : 49kg" << endl;
 		}
-		else if (tall[2][j] == h) {
-			gotoxy(20, 17); textcolor(15); cout << "당신의 키 : " << height << endl;
-			gotoxy(20, 19); cout << "당신의 몸무게 : " << weight << endl;
-			gotoxy(20, 21); textcolor(14); cout << "표준 몸무게 : 54kg" << endl;
+		else if (tall[1][j] == height) {//155~160
+			gotoxy(20, 19); textcolor(15); cout << "당신의 키 : " << tall[1][j] << endl;
+			gotoxy(20, 21); cout << "당신의 몸무게 : " << weight << endl;
+			gotoxy(20, 23); textcolor(14); cout << "표준 몸무게 : 52kg" << endl;
 		}
-		else if (tall[3][j] == h) {
-			gotoxy(20, 17); textcolor(15); cout << "당신의 키 : " << height << endl;
-			gotoxy(20, 19); cout << "당신의 몸무게 : " << weight << endl;
-			gotoxy(20, 21); textcolor(14); cout << "표준 몸무게 : 57kg" << endl;
+		else if (tall[2][j] == height) {//160~164
+			gotoxy(20, 19); textcolor(15); cout << "당신의 키 : " << tall[2][j] << endl;
+			gotoxy(20, 21); cout << "당신의 몸무게 : " << weight << endl;
+			gotoxy(20, 23); textcolor(14); cout << "표준 몸무게 : 54kg" << endl;
 		}
-		else if (tall[4][j] == h) {
-			gotoxy(20, 17); textcolor(15); cout << "당신의 키 : " << height << endl;
-			gotoxy(20, 19); cout << "당신의 몸무게 : " << weight << endl;
-			gotoxy(20, 21); textcolor(14); cout << "표준 몸무게 : 62kg" << endl;
+		else if (tall[3][j] == height) {//165~170
+			gotoxy(20, 19); textcolor(15); cout << "당신의 키 : " << tall[3][j] << endl;
+			gotoxy(20, 21); cout << "당신의 몸무게 : " << weight << endl;
+			gotoxy(20, 23); textcolor(14); cout << "표준 몸무게 : 57kg" << endl;
 		}
-		else if (tall[5][j] == h) {
-			gotoxy(20, 17); textcolor(15); cout << "당신의 키 : " << height << endl;
-			gotoxy(20, 19); cout << "당신의 몸무게 : " << weight << endl;
-			gotoxy(20, 21); textcolor(14); cout << "표준 몸무게 : 64kg" << endl;
+		else if (tall[4][j] == height) {//171 ~ 180
+			gotoxy(20, 19); textcolor(15); cout << "당신의 키 : " << tall[4][j] << endl;
+			gotoxy(20, 21); cout << "당신의 몸무게 : " << weight << endl;
+			gotoxy(20, 23); textcolor(14); cout << "표준 몸무게 : 62kg" << endl;
 		}
-		else if (tall[6][j] == h) {
-			gotoxy(20, 17); textcolor(15); cout << "당신의 키 : " << height << endl;
-			gotoxy(20, 19); cout << "당신의 몸무게 : " << weight << endl;
-			gotoxy(20, 21); textcolor(14); cout << "표준 몸무게 : 68kg" << endl;
+		else if (tall[5][j] == height) {//180~
+			gotoxy(20, 19); textcolor(15); cout << "당신의 키 : " << tall[5][j] << endl;
+			gotoxy(20, 21); cout << "당신의 몸무게 : " << weight << endl;
+			gotoxy(20, 23); textcolor(14); cout << "표준 몸무게 : 64kg" << endl;
 		}		
+		if (height < 150 || height > 180) {
+			gotoxy(20, 19); textcolor(15); cout << "당신의 키 : " << tall[5][j] << endl;
+			gotoxy(20, 21); cout << "당신의 몸무게 : " << weight << endl;
+			gotoxy(20, 23); textcolor(14); cout << "데이터 정보가 없습니다." << endl;
+		}
 	}
-
-	system("pause>null");
+		system("pause>null");
 }
 void TheKcal::inputWantCal() {
+	int n2;
 	//원하는 칼로리 소모량 입력
 	
 	start2_display();
 
-	int n2;//원하는 칼로리 소모량 입력받기
-	gotoxy(x-14, y-3);
+	ofstream fout("minusKcal.txt");
+	gotoxy(x-8, y-3);
 	cout << "원하는 칼로리 소모량을 입력하세요.(숫자)" << endl;
-	gotoxy(x-14, y-1);
+	gotoxy(x-8, y-1);
 	cout << ">>>";
 	cin >> n2;
+	fout << n2 << setw(4) << endl;
+
 	
-	gotoxy(x-14,y+1);
+	gotoxy(x-8,y+1);
 	cout << "원하는 칼로리 소모량 --> ";
 	textcolor(14);
-	gotoxy(x +12, y +1);
-	cout << n2 << endl;
+	gotoxy(x+17, y +1);
+	cout << n2;
+	gotoxy(x + 22, y + 1);
+	textcolor(15);
+	cout<<"kcal" << endl;
 	system("pause>null");
 }
-int TheKcal::chooseSports() {//운동선택
+int TheKcal::eatfood() {
 	start2_display();
-	gotoxy(x, y - 2);
+	gotoxy(x -4, y-6);
+	cout << "오늘 먹은 음식을 선택해주세요~!" << endl;
+	gotoxy(x+2, y - 2);
 	cout << ">";
-	gotoxy(x, y - 2);
+	gotoxy(x+2, y - 2);
+	cout << "학교 급식";
+	gotoxy(x+2, y - 1);
+	cout << "지지고";
+	gotoxy(x+2, y);
+	cout << "아마스빈";
+	gotoxy(x+2, y + 1);
+	cout << "분식";
+	
+	int k = key();
+	
+	return k;
+
+}
+int TheKcal::savefoodKcal() {
+	int cal = eatfood();
+	
+	savecal = 0;
+	switch (cal) {
+	case 0: savecal = 500; break;
+	case 1: savecal = 351; break;
+	case 2: savecal = 270; break;
+	case 3: savecal = 500; break;
+		}
+
+	ex_c = chooseSports();
+	if (ex_c == 0 || ex_c == 1 || ex_c == 2 || ex_c == 3)
+		ex_mathod(savecal);
+
+	return savecal;
+}
+int TheKcal::chooseSports() {//운동선택
+	x = 22;
+	y = 15;
+	start2_display();
+
+	/*string n;
+	system("cls");
+	start2_display();
+	gotoxy(x + 2,y-4);
+	cout << "운동을 하셨습니까?    (y/n)";
+	gotoxy(x + 2, y - 2);
+	cout << ">>";
+	cin >> n;
+	if (n == "n") menuDraw();
+
+	system("cls");
+	start2_display();
+	*/
+	gotoxy(x - 4, y - 4);
+	cout << "오늘 한 운동을 선택해주세요~!" << endl;
+	gotoxy(x+2, y);
 	cout << "유산소 운동";
-	gotoxy(x, y - 1);
+	gotoxy(x+2, y+1);
 	cout << "근력 운동";
-	gotoxy(x, y);
+	gotoxy(x+2, y+2);
 	cout << "스트레칭";
-	gotoxy(x, y + 1);
+	gotoxy(x+2, y + 3);
 	cout << "일상생활 운동";
 
 	int k = key();
 	return k;
 }
 
-void TheKcal::ex_mathod() {
-
+void TheKcal::ex_mathod(int countcal) {
+	int n2;
 	string str;
+	string id;
 	int htime;
+	int countcal_1 = countcal;//먹은 음식 칼로리
 
 	system("cls");
 	start2_display();
-	gotoxy(x-9, y );
+	gotoxy(x+2, y-5 );
 	textcolor(13);
-	cout << "입력하세요." << endl;
+	cout << "★입력하세요.★" << endl;
 
-	gotoxy(x-9, y+3);
+	gotoxy(x-5, y-1);
 	textcolor(15);
-	cout << "(1) ~15분" << "     " << "(2)15~30분 이상";
-	gotoxy(x-9, y+5);
+	cout << "(1) ~15분" << "     " << " (2)15~30분 이상";
+	gotoxy(x-5, y+1);
 	cout << "(3) 1시간" << "      " << "(4)2시간";
-	gotoxy(x-9, y + 7);
-	cout << ">>";
+	gotoxy(x-5, y+3);
+	textcolor(13);
+	cout << ">> ";
+	textcolor(15);
 	cin >> htime;
 	
-	switch (htime) {
-		
-	case 1 :
-		gotoxy(x - 14, y + 10);
-		cout << " **** 님 ***운동 15분 ~150칼로리 소모 하였습니다."; break;
-	case 2 :
-		gotoxy(x - 14, y + 10);
-		cout << " **** 님 ***운동 30~분 300칼로리 소모 하였습니다."; break;
-	case 3:
-		gotoxy(x - 14, y + 10);
-		cout << " **** 님 ***운동 1시간 ~557칼로리 소모 하였습니다."; break;
-	case 4:
-		gotoxy(x - 14, y + 10);
-		cout << " **** 님 ***운동 2시간 1000칼로리 소모 하였습니다."; break;
-	}
-	//여기 db해서 15분 했으면 ***님 **운동 **분 ~150칼로리소모 하였습니다.
-	//30~시간 했으면 300~500칼로리 소모 하였습니다. 출력창 나오게 하기
+	ifstream memberfin;
+	ifstream minusKcalfin;
 
-	//1시간 했으면 557칼로리칼로리 소모하였습니다.
-	//2시간 했으면 1000칼로리 이상 소모하였습니다. 출력창 나오게 하기
+	memberfin.open("member.txt");
+	minusKcalfin.open("minusKcal.txt");
+
+	memberfin >> id;
+	minusKcalfin >> n2;
+
+	system("cls");
+	start2_display();
+		switch (htime) {
+			x = 22;
+			y = 15;
+		case 1:
+			gotoxy(x - 4, y );
+			cout << id << setw(1) << "님 " << "운동 15분하셨습니다.";
+			gotoxy(x - 4, y + 2);
+			textcolor(13);
+			cout << "~150";
+			n3 = 150;
+			textcolor(15);
+			gotoxy(x,y+2);
+			cout<<" 칼로리 소모 하였습니다."; break;
+		case 2:
+			gotoxy(x - 4, y);
+			cout << id << setw(1) << "님 " << "운동 30분하셨습니다.";
+			gotoxy(x - 4, y + 2);
+			textcolor(13);
+			cout << "~300~500";
+			n3 = 450;
+			textcolor(15);
+			gotoxy(x, y + 2);
+			cout << " 칼로리 소모 하였습니다."; break;
+		case 3:
+			gotoxy(x - 4, y);
+			cout << id << setw(1) << "님 " << "운동 1시간하셨습니다.";
+			gotoxy(x - 4, y + 2);
+			textcolor(13);
+			cout << "507";
+			n3 = 507;
+			textcolor(15);
+			gotoxy(x , y + 2);
+			cout << " 칼로리 소모 하였습니다."; break;
+		case 4:
+			gotoxy(x - 4, y);
+			cout << id << setw(1) << "님 " << "운동 2시간하셨습니다.";
+			gotoxy(x - 4, y + 2);
+			textcolor(13);
+			cout << "1000";
+			n3 = 1000;
+			textcolor(15);
+			gotoxy(x, y + 2);
+			cout << " 칼로리 소모 하였습니다."; break;
+		}
 	system("pause>null");
+}
+
+void TheKcal::minus_kcal(){
+	int n2;
+	string id;
+	start2_display();
+	
+	
+
+	ifstream memberfin;
+	ifstream minusKcalfin;
+
+	memberfin.open("member.txt");
+	minusKcalfin.open("minusKcal.txt");
+
+	memberfin >> id;
+	minusKcalfin >> n2;
+
+	int total = n2-n3;
+	if (total < 0) total = 0;
+
+	gotoxy(x-2, y-8);
+	cout << id << setw(1) << "님!! ";
+	gotoxy(x-2, y-6);
+	cout << "칼로리 소모량 목표 : ";
+	textcolor(14);
+	gotoxy(x + 19, y - 6);
+	cout<< n2 << setw(4);
+	gotoxy(x-2, y - 4);
+	textcolor(15);
+	cout << "음식 칼로리 : ";
+	gotoxy(x + 13, y - 4);
+	textcolor(14);
+	cout<< savecal;
+	gotoxy(x-2, y - 2);
+	textcolor(15);
+	cout << "운동 후 칼로리 소모량 : ";
+	gotoxy(x + 22, y - 2);
+	textcolor(14);
+	cout<< n3;
+	gotoxy(x-2, y);
+	textcolor(15);
+	cout << "남은 칼로리 양 : ";
+	gotoxy(x + 16, y);
+	textcolor(14);
+	cout<< total;
+
+	system("pause>null");
+
 }
 //=====================================================================================
 
 void TheKcal::gotoxy(int x, int y){
 	{
-		COORD Cur = { x-1,y-1 };
+		COORD Cur = { (short)x-1,(short)y-1 };
 
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
-	}
+	} 
 }
 
 void TheKcal::CursorView(char show)//커서숨기기
