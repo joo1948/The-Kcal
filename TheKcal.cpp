@@ -199,7 +199,7 @@ void TheKcal::readmemo() {
 	int j = 0;
 	while (readmemo>>memo) {
 		textcolor(15);
-		gotoxy(x+4 , 13+j );
+		gotoxy(x+2 , 13+j );
 		cout << memo <<"\t" << endl;
 		j+=2;
 	}
@@ -213,21 +213,12 @@ int TheKcal::menuDraw()
 {
 	start2_display();//네모 박스 부르기
 
-	gotoxy(27, 8);
-	//for (int i = 0; i < 15; i++) {
-		textcolor(15);
-	//}
-	cout << "+The Kcal+" << endl;
-
-	gotoxy(25, 10);
-	textcolor(14);
-	cout << "[ Space키 ]" << endl;
-	gotoxy(20, 12);
-	textcolor(14);
-	cout << "[ w키(UP) , s키(DOWN) ]" << endl;
-
 	this->x = 22;
 	this->y = 15;
+
+	textcolor(8);
+	gotoxy(27, 11);
+	cout << "++The Kcal++";
 
 	textcolor(15);
 	gotoxy(x, y);
@@ -399,19 +390,6 @@ int TheKcal::chooseSports() {//운동선택
 	y = 15;
 	start2_display();
 
-	/*string n;
-	system("cls");
-	start2_display();
-	gotoxy(x + 2,y-4);
-	cout << "운동을 하셨습니까?    (y/n)";
-	gotoxy(x + 2, y - 2);
-	cout << ">>";
-	cin >> n;
-	if (n == "n") menuDraw();
-
-	system("cls");
-	start2_display();
-	*/
 	gotoxy(x - 4, y - 4);
 	cout << "오늘 한 운동을 선택해주세요~!" << endl;
 	gotoxy(x+2, y);
@@ -466,44 +444,44 @@ void TheKcal::ex_mathod(int countcal) {
 			x = 22;
 			y = 15;
 		case 1:
-			gotoxy(x - 4, y );
+			gotoxy(x - 4, y-3 );
 			cout << id << setw(1) << "님 " << "운동 15분하셨습니다.";
-			gotoxy(x - 4, y + 2);
+			gotoxy(x - 4, y-1);
 			textcolor(13);
 			cout << "~150";
 			n3 = 150;
 			textcolor(15);
-			gotoxy(x,y+2);
+			gotoxy(x,y-1);
 			cout<<" 칼로리 소모 하였습니다."; break;
 		case 2:
-			gotoxy(x - 4, y);
+			gotoxy(x - 4, y-3);
 			cout << id << setw(1) << "님 " << "운동 30분하셨습니다.";
-			gotoxy(x - 4, y + 2);
+			gotoxy(x - 4, y -1);
 			textcolor(13);
 			cout << "~300~500";
 			n3 = 450;
 			textcolor(15);
-			gotoxy(x, y + 2);
+			gotoxy(x, y -1);
 			cout << " 칼로리 소모 하였습니다."; break;
 		case 3:
-			gotoxy(x - 4, y);
+			gotoxy(x - 4, y-3);
 			cout << id << setw(1) << "님 " << "운동 1시간하셨습니다.";
-			gotoxy(x - 4, y + 2);
+			gotoxy(x - 4, y -1);
 			textcolor(13);
 			cout << "507";
 			n3 = 507;
 			textcolor(15);
-			gotoxy(x , y + 2);
+			gotoxy(x , y -1);
 			cout << " 칼로리 소모 하였습니다."; break;
 		case 4:
-			gotoxy(x - 4, y);
+			gotoxy(x - 4, y-3);
 			cout << id << setw(1) << "님 " << "운동 2시간하셨습니다.";
-			gotoxy(x - 4, y + 2);
+			gotoxy(x - 4, y-1);
 			textcolor(13);
 			cout << "1000";
 			n3 = 1000;
 			textcolor(15);
-			gotoxy(x, y + 2);
+			gotoxy(x, y-1);
 			cout << " 칼로리 소모 하였습니다."; break;
 		}
 	system("pause>null");
@@ -583,8 +561,12 @@ void TheKcal::start2_display() {
 	textcolor(15);
 	unsigned char a = 0xa6, b[7], i;
 
-	for (i = 1; i < 7; i++) b[i] = 0xa0 + i;
+ for (i = 1; i < 7; i++) b[i] = 0xa0 + i;
 
+	gotoxy(7, 4);
+	textcolor(6);
+	cout << "▲▲                                           ▲▲";
+	textcolor(15);
 	gotoxy(6, 5);
 	cout << a << b[3]; //r
 	for (int i = 1; i <= 50; i++) cout << a << b[1]; //-
@@ -611,14 +593,14 @@ void TheKcal::textcolor(int color_number) //텍스트 칼라를 바꿔주는 함수
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color_number);
 }
 int TheKcal::key() {
-	x = 22;
-	y = 15;
+
+	// 1. 매크로로 좌우상하를 설정한다.
 	textcolor(10);
 	gotoxy(x - 2, y);
 	cout << ">";
 	while (1) {
 		int n = keyControl();
-		switch (n) {
+		switch (n) { 
 		case UP: {
 			if (y > 15) {
 				gotoxy(x - 2, y);
