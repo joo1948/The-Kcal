@@ -12,8 +12,10 @@
 #include <iomanip>
 using namespace std;
 
-#define UP 0
-#define DOWN 1
+#define LEFT 75
+#define RIGHT 77
+#define UP 72
+#define DOWN 80
 #define SUBMIT 4
 
 
@@ -24,6 +26,7 @@ private:
 	int y;
 	int ex_c;
 public:
+	
 	void admire();//관리자
 	void showadmire(int k);//관리자 리뷰 보기 1
 	void showadmire_1();//관리자 리뷰 보기 2
