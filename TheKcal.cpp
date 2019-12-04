@@ -3,9 +3,9 @@
 
 #include "TheKcal.h"
 
-int ex_c, savecal,n3;
 
 
+int ex_c = 0, savecal = 0, n3 = 0, cnt = 0;
 TheKcal::TheKcal(int x, int y) {
 	this->x = x;
 	this->y = y;
@@ -17,6 +17,45 @@ int TheKcal::keyControl() {
 	if (temp == 'w' || temp == 'W') return UP;
 	else if (temp == 's' || temp == 'S') return DOWN;
 	else if (temp == ' ') return SUBMIT;
+}
+void TheKcal::ggamppack() {
+	string key;
+
+	
+
+		textcolor(13);
+		gotoxy(25, 11);
+		printf("T");
+		Sleep(400);
+		gotoxy(26, 11);
+		textcolor(4);
+		printf("h");
+		Sleep(400);
+		gotoxy(27, 11);
+		textcolor(14);
+		cout << "e";
+		Sleep(400);
+		gotoxy(28, 11);
+		cout << " ";
+		Sleep(400);
+		gotoxy(29, 11);
+		textcolor(10);
+		cout << "K";
+		Sleep(400);
+		gotoxy(30, 11);
+		textcolor(11);
+		cout << "c";
+		Sleep(400);
+		gotoxy(31, 11);
+		textcolor(9);
+		cout << "a";
+		Sleep(400);
+		gotoxy(32, 11);
+		textcolor(5);
+		cout << "l";
+		Sleep(400);
+	
+		inputId();
 }
 void TheKcal::inputId() {
 	string id;
@@ -132,7 +171,7 @@ void TheKcal::showadmire_1() {
 		while (review >> empid >> emptalk/*>> empreview*/) {
 			textcolor(15);
 			gotoxy(x - 10, y - j);
-			cout << empid << "\t" << emptalk << endl/*<< empreview << setw(20) */;
+			cout << empid << "\t" << emptalk << endl;
 			j -= 3;
 
 		}
@@ -229,9 +268,9 @@ int TheKcal::menuDraw()
 	cout << "먹은 음식" << endl;
 	gotoxy(x, y + 3);
 	cout << "칼로리 소모한 양 보기" << endl;
-
+	cnt++;//증가. q보다 크면 값 넣기 ++++
 	int k = key();
-
+	
 	return k;
 }
 void TheKcal::choose_number() {
@@ -370,18 +409,15 @@ int TheKcal::eatfood() {
 }
 int TheKcal::savefoodKcal() {
 	int cal = eatfood();
-	
-	savecal = 0;
-	switch (cal) {
-	case 0: savecal = 500; break;
-	case 1: savecal = 351; break;
-	case 2: savecal = 270; break;
-	case 3: savecal = 500; break;
-		}
 
+	switch (cal) {
+	case 0: if(cnt==1) savecal = 500; if (cnt > 1) { savecal += 500; }break;
+	case 1: if(cnt==1) savecal = 351; if (cnt > 1) { savecal += 351; }break;
+	case 2: if(cnt==1) savecal = 270; if (cnt > 1) { savecal += 270; }break;
+	case 3: if(cnt==1) savecal = 500; if (cnt > 1) { savecal += 500; }break;
+		}
 	ex_c = chooseSports();
-	if (ex_c == 0 || ex_c == 1 || ex_c == 2 || ex_c == 3)
-		ex_mathod(savecal);
+	if (ex_c == 0 || ex_c == 1 || ex_c == 2 || ex_c == 3) ex_mathod(savecal);
 
 	return savecal;
 }
@@ -409,9 +445,10 @@ void TheKcal::ex_mathod(int countcal) {
 	int n2;
 	string str;
 	string id;
-	int htime;
+	int htime, one = 150, two = 450, three = 507, four = 1000;
 	int countcal_1 = countcal;//먹은 음식 칼로리
-
+	
+	
 	system("cls");
 	start2_display();
 	gotoxy(x+2, y-5 );
@@ -441,6 +478,7 @@ void TheKcal::ex_mathod(int countcal) {
 	system("cls");
 	start2_display();
 		switch (htime) {
+			
 			x = 22;
 			y = 15;
 		case 1:
@@ -449,41 +487,56 @@ void TheKcal::ex_mathod(int countcal) {
 			gotoxy(x - 4, y-1);
 			textcolor(13);
 			cout << "~150";
-			n3 = 150;
+			
 			textcolor(15);
 			gotoxy(x,y-1);
-			cout<<" 칼로리 소모 하였습니다."; break;
+			if (cnt == 1) n3 = 150;
+			cout<<" 칼로리 소모 하였습니다.";
+			
+			if (cnt >= 2&&htime==1) { n3 += 150; }
+			/*else if(cnt >= 2 && htime == 2) { n3 += 450; }
+			else if (cnt >= 2 && htime == 3) { n3 += 507; }
+			else if (cnt >= 2 && htime == 4) { n3 += 1000; }*/
+			break;
 		case 2:
 			gotoxy(x - 4, y-3);
 			cout << id << setw(1) << "님 " << "운동 30분하셨습니다.";
 			gotoxy(x - 4, y -1);
 			textcolor(13);
-			cout << "~300~500";
-			n3 = 450;
+			cout << "450";
+			if(cnt==1) n3 = 450;
 			textcolor(15);
 			gotoxy(x, y -1);
-			cout << " 칼로리 소모 하였습니다."; break;
+			if (cnt >= 2 && htime == 2) { n3 += 450; }
+			cout << " 칼로리 소모 하였습니다.";
+
+			break;
 		case 3:
 			gotoxy(x - 4, y-3);
 			cout << id << setw(1) << "님 " << "운동 1시간하셨습니다.";
 			gotoxy(x - 4, y -1);
 			textcolor(13);
 			cout << "507";
-			n3 = 507;
+			if(cnt==1 )n3 = 507;
 			textcolor(15);
 			gotoxy(x , y -1);
-			cout << " 칼로리 소모 하였습니다."; break;
+			cout << " 칼로리 소모 하였습니다.";
+			if (cnt >= 2 && htime == 3) { n3 += 507; }
+			break;
 		case 4:
 			gotoxy(x - 4, y-3);
 			cout << id << setw(1) << "님 " << "운동 2시간하셨습니다.";
 			gotoxy(x - 4, y-1);
 			textcolor(13);
 			cout << "1000";
-			n3 = 1000;
+			if(cnt==1) n3 = 1000;
 			textcolor(15);
 			gotoxy(x, y-1);
-			cout << " 칼로리 소모 하였습니다."; break;
+			if (cnt >= 2 && htime == 4) { n3 += 1000; }
+			cout << " 칼로리 소모 하였습니다.";
+			break;
 		}
+	
 	system("pause>null");
 }
 
@@ -527,11 +580,11 @@ void TheKcal::minus_kcal(){
 	cout<< n3;
 	gotoxy(x-2, y);
 	textcolor(15);
-	cout << "남은 칼로리 양 : ";
+	cout << "목표까지 남은 칼로리 양 : ";
 	gotoxy(x + 16, y);
 	textcolor(14);
 	cout<< total;
-
+	
 	system("pause>null");
 
 }
